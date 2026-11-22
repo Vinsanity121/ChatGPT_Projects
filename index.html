@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f6f1">
+  <title>College &amp; Career Planner</title>
+  <style>
+    :root { color-scheme: light dark; --ink:light-dark(#24352f,#edf3ef);--muted:light-dark(#718078,#aab8b0);--bg:light-dark(#f5f6f1,#171e1a);--surface:light-dark(#fffefa,#242d28);--line:light-dark(#e1e7df,#3c4941);--green:#356b56;--soft:light-dark(#e8f0e8,#304238); }
+    * { box-sizing:border-box; }
+    body { margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    header { height:62px;display:flex;align-items:center;justify-content:space-between;padding:0 max(20px,calc((100vw - 1120px)/2));background:var(--surface);border-bottom:1px solid var(--line); }
+    .brand {font-weight:650;font-size:14px;}
+    .wrap {max-width:1080px;margin:0 auto;padding:40px 22px 50px;}
+    .welcome {max-width:660px;min-height:580px;margin:auto;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:22px;}
+    .mark {width:52px;height:52px;display:grid;place-items:center;margin-bottom:18px;border-radius:17px;background:var(--soft);color:var(--green);font-size:25px;}
+    h1 {font-size:30px;line-height:1.2;letter-spacing:-.035em;margin:0 0 10px;font-weight:650;}
+    h2 {font-size:20px;line-height:1.3;margin:0 0 5px;font-weight:620;}
+    h3 {font-size:15px;line-height:1.35;margin:0 0 5px;font-weight:620;}
+    p {margin:0;color:var(--muted);}
+    .welcome p {max-width:510px;font-size:14px;}
+    .privacy {max-width:500px;margin-top:16px!important;font-size:11px;}
+    .connection {margin-top:17px;font-size:11px;color:var(--muted);}
+    button {font:inherit;}
+    .primary {min-height:44px;margin-top:23px;padding:10px 17px;border:0;border-radius:9px;background:var(--green);color:#fff;font:600 13px ui-sans-serif,system-ui;cursor:pointer;}
+    .primary:disabled {opacity:.5;cursor:default;}
+    .intake {max-width:680px;margin:0 auto;padding:20px 23px 17px;background:var(--surface);border:1px solid var(--line);border-radius:15px;}
+    .progress {display:flex;align-items:center;gap:12px;margin-bottom:24px;}
+    .progress-label {flex:0 0 auto;color:var(--muted);font-size:11px;}
+    .track {height:4px;flex:1;background:var(--line);border-radius:99px;overflow:hidden;}
+    .fill {height:100%;width:0;background:var(--green);border-radius:99px;transition:width .2s ease;}
+    .hint {font-size:12px;margin:0 0 16px;}
+    .choices {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;}
+    .choice {min-height:46px;padding:9px 12px;text-align:left;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--ink);font:500 13px ui-sans-serif,system-ui;cursor:pointer;}
+    .choice[aria-pressed="true"] {border:2px solid var(--green);padding:8px 11px;background:var(--soft);}
+    .field-label {display:block;font-size:12px;font-weight:600;margin:15px 0 6px;}
+    textarea {display:block;width:100%;min-height:112px;resize:vertical;padding:10px 11px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);font:13px/1.5 ui-sans-serif,system-ui;}
+    :focus-visible {outline:2px solid var(--green);outline-offset:2px;}
+    .bottom {display:flex;align-items:center;justify-content:space-between;gap:10px;border-top:1px solid var(--line);margin-top:20px;padding-top:13px;}
+    .text-button {border:0;background:transparent;color:var(--muted);font:12px ui-sans-serif,system-ui;cursor:pointer;padding:8px 3px;}
+    .text-button:disabled {visibility:hidden;}
+    .bottom .primary {margin:0;min-height:40px;padding:8px 14px;font-size:12px;}
+    .busy {max-width:640px;margin:70px auto;text-align:center;padding:36px 22px;background:var(--surface);border:1px solid var(--line);border-radius:15px;}
+    .busy p {margin-top:8px;font-size:13px;}
+    .spinner {width:28px;height:28px;margin:0 auto 15px;border:3px solid var(--line);border-top-color:var(--green);border-radius:50%;animation:spin .8s linear infinite;}
+    @keyframes spin {to{transform:rotate(360deg)}}
+    .error {max-width:640px;margin:55px auto;padding:22px;background:var(--surface);border:1px solid var(--line);border-radius:14px;}
+    .error p {font-size:13px;margin-top:7px;}
+    .error .primary {margin-top:14px;}
+    .plan {max-width:1000px;margin:0 auto;}
+    .plan-head {margin-bottom:16px;}
+    .eyebrow {color:var(--green);font-size:10px;font-weight:650;letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px;}
+    .plan-head h1 {font-size:27px;margin-bottom:6px;}
+    .plan-head p {font-size:13px;}
+    .strategy {margin:12px 0 18px;padding:14px 16px;border-radius:10px;background:var(--soft);}
+    .strategy strong {display:block;font-size:12px;margin-bottom:3px;}
+    .strategy p {font-size:12px;color:var(--ink);opacity:.86;}
+    .year-nav {position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:12px;}
+    .year-nav::before {content:"";position:absolute;left:8%;right:8%;top:15px;height:2px;background:var(--line);}
+    .year-button {position:relative;z-index:1;display:flex;align-items:center;gap:8px;min-width:0;padding:0 3px 8px;border:0;background:transparent;color:var(--muted);font:12px ui-sans-serif,system-ui;text-align:left;cursor:pointer;}
+    .year-button[aria-pressed="true"] {color:var(--ink);font-weight:650;}
+    .year-dot {width:30px;height:30px;flex:0 0 30px;display:grid;place-items:center;border:2px solid var(--line);border-radius:50%;background:var(--bg);font-size:10px;font-weight:650;}
+    .year-button[aria-pressed="true"] .year-dot {border-color:var(--green);background:var(--green);color:#fff;}
+    .year-button small {display:block;color:var(--muted);font-size:10px;font-weight:400;}
+    .year-detail {padding:18px;background:var(--surface);border:1px solid var(--line);border-radius:13px;}
+    .year-heading {display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:13px;}
+    .year-heading h2 {margin:0;}
+    .now-tag {padding:4px 8px;border-radius:99px;background:var(--soft);color:var(--green);font-size:10px;font-weight:650;white-space:nowrap;}
+    .actions {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
+    .action {padding:13px;border-radius:9px;background:var(--bg);min-height:125px;}
+    .action .timing {display:block;color:var(--green);font-size:9px;letter-spacing:.08em;text-transform:uppercase;font-weight:650;margin-bottom:6px;}
+    .action strong {display:block;font-size:13px;line-height:1.35;margin-bottom:5px;}
+    .action p {font-size:11px;line-height:1.45;margin:0 0 8px;}
+    .action .why {font-size:10px;color:var(--ink);opacity:.75;}
+    .followups,.assumptions {margin-top:14px;padding:13px 15px;background:var(--surface);border:1px solid var(--line);border-radius:11px;}
+    .followups h3,.assumptions h3 {font-size:13px;margin-bottom:5px;}
+    .followups ul {margin:6px 0 0;padding-left:19px;color:var(--muted);font-size:12px;}
+    .plan-controls {display:flex;flex-wrap:wrap;align-items:center;gap:9px;margin-top:14px;}
+    .secondary {padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:transparent;color:var(--green);font:600 11px ui-sans-serif,system-ui;cursor:pointer;}
+    .source-note {font-size:10px;margin-top:14px;}
+    [hidden] {display:none!important;}
+    @media(max-width:720px){header{padding:0 16px}.actions{grid-template-columns:1fr}.action{min-height:0}.wrap{padding:28px 15px 35px}.plan-head h1{font-size:23px}}
+    @media(max-width:480px){.welcome{min-height:500px;padding:15px 3px}.welcome h1{font-size:25px}.intake{padding:17px 14px 14px}.choices{grid-template-columns:1fr}.year-nav{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:8px}.year-nav::before{display:none}.bottom{gap:5px}.bottom .text-button{font-size:11px}.year-detail{padding:14px}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+  </style>
+</head>
+<body>
+  <header><div class="brand">College &amp; Career Planner</div></header>
+  <main class="wrap">
+    <section class="welcome" id="welcome">
+      <div class="mark">✳</div>
+      <h1>Let’s build a plan around your life.</h1>
+      <p>I’ll learn about your school, classes, interests, activities, and what you want after high school. When an AI service is connected, it can use those details to make a year-by-year plan, explain why each step fits, and point out what’s still unclear.</p>
+      <p class="privacy" id="privacy">You can skip questions. This prototype doesn’t save your answers. Avoid entering your full name, contact information, or anything you’d rather keep private.</p>
+      <button class="primary" id="start" type="button">Start my profile&nbsp; →</button>
+      <div class="connection" id="connection">Checking AI connection…</div>
+    </section>
+    <section class="intake" id="intake" hidden aria-label="Student profile questions">
+      <div class="progress"><span class="progress-label" id="progress-label"></span><div class="track" role="progressbar" aria-label="Profile questions progress" aria-valuemin="1" aria-valuemax="15" aria-valuenow="1"><div class="fill" id="progress-fill"></div></div></div>
+      <div id="question" aria-live="polite"></div>
+      <div class="bottom"><button type="button" class="text-button" id="back">← Back</button><button type="button" class="text-button" id="skip">Skip this question</button><button type="button" class="primary" id="next" disabled>Continue&nbsp; →</button></div>
+    </section>
+    <section class="busy" id="busy" hidden aria-live="polite"><div class="spinner" aria-hidden="true"></div><h2>Building your plan</h2><p>I’m connecting your goals, school life, interests, and constraints into steps for each year.</p></section>
+    <section class="error" id="error" hidden role="alert"><h2>We couldn’t create your plan yet.</h2><p id="error-message"></p><button class="primary" id="retry" type="button">Try again</button><button class="secondary" id="edit-error" type="button">Review my answers</button></section>
+    <section class="plan" id="plan" hidden>
+      <div class="plan-head"><div class="eyebrow">AI-generated roadmap</div><h1 id="plan-title">Your roadmap</h1><p id="plan-summary"></p></div>
+      <div class="strategy"><strong>How I’m approaching your goal</strong><p id="strategy-text"></p></div>
+      <nav class="year-nav" id="year-nav" aria-label="Roadmap by school year"></nav>
+      <section class="year-detail" id="year-detail" aria-live="polite"></section>
+      <section class="followups" id="followups" hidden><h3>Questions that could make this plan sharper</h3><ul id="followup-list"></ul></section>
+      <section class="assumptions" id="assumptions" hidden><h3>Things to confirm</h3><ul id="assumption-list"></ul></section>
+      <div class="plan-controls"><button class="secondary" id="edit-plan" type="button">Edit my answers</button><button class="primary" id="regenerate" type="button" style="margin:0">Generate an updated plan</button></div>
+      <p class="source-note">This is AI-generated guidance based on your answers. School rules, admissions requirements, and deadlines must be checked against current official sources before you act.</p>
+    </section>
+  </main>
+  <script>
+    const steps=[
+      {id:'grade',section:'School',type:'single',required:true,title:'What grade are you in?',choices:['Freshman · 9th grade','Sophomore · 10th grade','Junior · 11th grade','Senior · 12th grade']},
+      {id:'school',section:'School',type:'text',title:'What high school do you attend?',hint:'If you can, include city and state so later advice can use the right school context.',placeholder:'For example, Olympus High School, Holladay, Utah'},
+      {id:'academic',section:'School',type:'single',required:true,title:'How are your classes going right now?',choices:['Going well','Some classes are challenging','I want help with studying or staying organized','I’m still figuring out my classes']},
+      {id:'courses',section:'School',type:'text',title:'What classes are you taking this year?',hint:'If you can, name a class that feels easy and one that takes extra effort.',placeholder:'For example: English, biology, algebra…'},
+      {id:'subjects',section:'Interests',type:'multi',title:'What subjects or topics catch your interest?',hint:'Choose any that fit, or skip if you’re not sure yet.',choices:['Science or health','Technology or engineering','Writing or languages','Art, music, or design','Business or entrepreneurship','History or social sciences','Sports or movement','I’m still exploring']},
+      {id:'interestNotes',section:'Interests',type:'text',title:'What do you enjoy doing when you have a choice?',hint:'This can be something at school, at home, with friends, or on your own.',placeholder:'Tell me about things you like learning, making, or doing.'},
+      {id:'activities',section:'Activities',type:'multi',title:'What do you do outside class?',hint:'Include activities that take time or matter to you.',choices:['School sports','Clubs or student groups','A job or helping with a family business','Volunteering or community work','Arts, music, or creative projects','Family responsibilities','Hobbies or independent projects','I’m not involved yet']},
+      {id:'activityDetails',section:'Activities',type:'text',title:'Tell me more about your activities.',hint:'What sports, clubs, jobs, or hobbies matter to you? What role do you have, about how many hours a week do they take, and what would you like to accomplish?',placeholder:'Share as much or as little detail as you like.'},
+      {id:'destination',section:'After high school',type:'single',required:true,title:'What are you considering after high school?',choices:['College (2-year or 4-year)','Career training, trade school, or apprenticeship','Work, service, or military','I’m not sure yet']},
+      {id:'career',section:'After high school',type:'text',title:'Are there careers or fields you’re curious about?',hint:'It’s okay to be undecided. Name a few interests or leave this blank.',placeholder:'For example, health care, teaching, design, engineering…'},
+      {id:'whyCollege',section:'Your goals',type:'text',title:'Why are you thinking about college?',hint:'What do you hope college could help you learn, experience, or do?',placeholder:'Your own words are best.'},
+      {id:'highSchoolGoal',section:'Your goals',type:'text',title:'What do you want to get out of high school?',hint:'Think about learning, friendships, sports, leadership, independence, or anything else that matters to you.',placeholder:'What would make these years feel meaningful?'},
+      {id:'priorities',section:'Your preferences',type:'multi',title:'What would matter in a college or next step?',hint:'Choose the things you would want the plan to consider.',choices:['A program or major I care about','Strong academic challenge and ambitious college options','Affordable cost and financial aid','Location or being near home','Campus size and community','Hands-on learning or internships','Academic and personal support','Keeping several options open']},
+      {id:'help',section:'Your preferences',type:'multi',title:'Where would you like the most help first?',hint:'This helps the AI decide what to prioritize.',choices:['Doing well in classes','Exploring careers','Growing a club or activity','Finding colleges or programs that fit','Understanding admissions steps','Planning for cost and financial aid','Balancing school with sports, work, or family']},
+      {id:'barriers',section:'Your situation',type:'multi',title:'What could make your plan harder to follow?',hint:'This is optional. It helps keep the plan realistic.',choices:['Limited time or a busy schedule','Some classes feel difficult','Cost or financial uncertainty','Getting to activities or programs','Balancing sports, work, or family responsibilities','No major barrier right now','I’d rather not say']}
+    ];
+    const answers={grade:'',school:'',academic:'',courses:'',subjects:[],interestNotes:'',activities:[],activityDetails:'',destination:'',career:'',whyCollege:'',highSchoolGoal:'',priorities:[],help:[],barriers:[]};
+    let stepIndex=0;
+    let currentPlan=null;
+    const $=selector=>document.querySelector(selector);
+    const isGithubPages=location.hostname.endsWith('github.io');
+    const apiUrl=path=>new URL(path,document.baseURI).href;
+    const escapeHtml=value=>String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+    async function checkConnection(){
+      if(isGithubPages){
+        $('#connection').textContent='Public preview · AI plan generation is not connected.';
+        $('#privacy').textContent='Your answers stay in this browser during this preview. No plan service is connected, so answers are not sent or saved. Avoid entering your full name or contact information.';
+        return;
+      }
+      try{
+        const response=await fetch(apiUrl('./api/status'));
+        const data=await response.json();
+        $('#connection').textContent=data.configured?'AI plan generation is connected.':'AI is not configured yet. Add the server API key to enable plan generation.';
+        $('#privacy').textContent='You can skip questions. Your answers are sent to the AI service only when you generate a plan. This prototype doesn’t save them; avoid entering your full name or contact information.';
+      }catch{
+        $('#connection').textContent='Open this site through its local server to use AI plan generation.';
+      }
+    }
+    function show(view){['welcome','intake','busy','error','plan'].forEach(id=>$('#'+id).hidden=id!==view);}
+    function renderQuestion(){
+      const step=steps[stepIndex];
+      $('#progress-label').textContent=`${step.section} · ${stepIndex+1} / ${steps.length}`;
+      $('#progress-fill').style.width=`${((stepIndex+1)/steps.length)*100}%`;
+      $('.track').setAttribute('aria-valuemax',String(steps.length));$('.track').setAttribute('aria-valuenow',String(stepIndex+1));
+      $('#back').disabled=stepIndex===0;
+      $('#skip').disabled=!!step.required&&!answers[step.id];
+      $('#next').disabled=!!step.required&&!answers[step.id];
+      $('#next').innerHTML=stepIndex===steps.length-1?'Generate my AI plan&nbsp; →':'Continue&nbsp; →';
+      let html=`<h2>${step.title}</h2>${step.hint?`<p class="hint">${step.hint}</p>`:''}`;
+      if(step.type==='single'||step.type==='multi'){
+        html+=`<div class="choices">${step.choices.map(choice=>`<button type="button" class="choice" aria-pressed="${step.type==='single'?answers[step.id]===choice:answers[step.id].includes(choice)}" data-choice="${escapeHtml(choice)}">${escapeHtml(choice)}</button>`).join('')}</div>`;
+      } else {
+        html+=`<label class="field-label" for="answer-field">Your answer <span style="color:var(--muted);font-weight:400">(optional)</span></label><textarea id="answer-field" maxlength="700" placeholder="${escapeHtml(step.placeholder)}">${escapeHtml(answers[step.id])}</textarea>`;
+      }
+      $('#question').innerHTML=html;
+      document.querySelectorAll('[data-choice]').forEach(button=>button.addEventListener('click',()=>{
+        const value=button.dataset.choice;
+        if(step.type==='single') answers[step.id]=value;
+        else {
+          const exclusive=['I’m still exploring','I’m not involved yet','No major barrier right now','I’d rather not say'];
+          const selected=answers[step.id];
+          if(exclusive.includes(value)) answers[step.id]=selected.includes(value)?[]:[value];
+          else answers[step.id]=selected.includes(value)?selected.filter(item=>item!==value&&!exclusive.includes(item)):[...selected.filter(item=>!exclusive.includes(item)),value];
+        }
+        renderQuestion();
+      }));
+      const field=$('#answer-field');if(field)field.addEventListener('input',()=>{answers[step.id]=field.value;});
+    }
+    function moveForward(){if(stepIndex<steps.length-1){stepIndex++;renderQuestion();}else generatePlan();}
+    function editAnswers(){currentPlan=null;stepIndex=0;show('intake');renderQuestion();}
+    async function generatePlan(){
+      const field=$('#answer-field');if(field)answers[steps[stepIndex].id]=field.value;
+      if(isGithubPages){
+        $('#error-message').textContent='This public GitHub Pages preview is static and has no AI server connected. Your answers were not sent or saved. You can review them here, or use the local version when its private AI service is configured.';
+        $('#retry').hidden=true;
+        show('error');
+        return;
+      }
+      show('busy');
+      try{
+        const response=await fetch(apiUrl('./api/generate-plan'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({profile:answers})});
+        const data=await response.json();
+        if(!response.ok)throw new Error(data.error||'The plan service could not respond.');
+        currentPlan=data.plan;renderPlan(currentPlan);show('plan');
+      }catch(error){$('#error-message').textContent=error.message.includes('fetch')?'The plan service could not be reached. Start the local server and try again.':error.message;show('error');}
+    }
+    function renderPlan(plan){
+      $('#plan-title').textContent=plan.title;
+      $('#plan-summary').textContent=plan.student_summary;
+      $('#strategy-text').textContent=plan.strategy;
+      const start=Number(String(answers.grade).match(/\d+/)?.[0]||9);
+      const years=plan.yearly_plan.filter(item=>item.grade>=start).sort((a,b)=>a.grade-b.grade);
+      $('#year-nav').innerHTML=years.map((item,index)=>`<button class="year-button" type="button" data-grade="${item.grade}" aria-pressed="${index===0}"><span class="year-dot">${item.grade}</span><span>${escapeHtml(item.year_name)}<small>${escapeHtml(item.theme)}</small></span></button>`).join('');
+      years.forEach((item,index)=>$(`[data-grade="${item.grade}"]`).addEventListener('click',()=>showYear(item,years,index===0)));
+      if(years.length)showYear(years[0],years,true);
+      $('#followups').hidden=!plan.follow_up_questions.length;
+      $('#followup-list').innerHTML=plan.follow_up_questions.map(item=>`<li>${escapeHtml(item)}</li>`).join('');
+      $('#assumptions').hidden=!plan.assumptions.length;
+      $('#assumption-list').innerHTML=plan.assumptions.map(item=>`<li>${escapeHtml(item)}</li>`).join('');
+    }
+    function showYear(item,years,isCurrent){
+      document.querySelectorAll('.year-button').forEach(button=>button.setAttribute('aria-pressed',String(Number(button.dataset.grade)===item.grade)));
+      $('#year-detail').innerHTML=`<div class="year-heading"><h2>${escapeHtml(item.year_name)} · ${escapeHtml(item.theme)}</h2>${isCurrent?'<span class="now-tag">Starting here</span>':''}</div><div class="actions">${item.steps.map((step,index)=>`<article class="action"><span class="timing">Step ${index+1} · ${escapeHtml(step.timing)}</span><strong>${escapeHtml(step.action)}</strong><p>${escapeHtml(step.why)}</p><div class="why"><strong>Progress looks like:</strong> ${escapeHtml(step.success_measure)}</div></article>`).join('')}</div>`;
+    }
+    $('#start').addEventListener('click',()=>{show('intake');renderQuestion();});
+    $('#back').addEventListener('click',()=>{if(stepIndex>0){stepIndex--;renderQuestion();}else show('welcome');});
+    $('#skip').addEventListener('click',moveForward);
+    $('#next').addEventListener('click',moveForward);
+    $('#retry').addEventListener('click',generatePlan);
+    $('#edit-error').addEventListener('click',editAnswers);
+    $('#edit-plan').addEventListener('click',editAnswers);
+    $('#regenerate').addEventListener('click',generatePlan);
+    checkConnection();
+  </script>
+</body>
+</html>
